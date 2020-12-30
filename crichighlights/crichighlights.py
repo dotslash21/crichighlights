@@ -5,6 +5,8 @@ from typing import List, Generator
 
 import requests
 
+MAX_NUM_HIGHLIGHTS = 20
+
 
 class CricHighlights:
 
@@ -62,7 +64,12 @@ class CricHighlights:
             else:
                 high = mid - 1
 
-        return highlights[:low + 1]
+        # Check update count overflow
+        count = low + 1
+        if count > MAX_NUM_HIGHLIGHTS:
+            count = MAX_NUM_HIGHLIGHTS
+
+        return highlights[:count]
 
     @staticmethod
     def is_match_id_valid(match_id: str) -> bool:
