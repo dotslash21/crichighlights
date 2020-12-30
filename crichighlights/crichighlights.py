@@ -52,32 +52,6 @@ class CricHighlights:
         return True
 
     @staticmethod
-    def __match_did_end(match_id: str) -> bool:
-        """Method to check if the match has ended.
-
-        Args:
-            match_id (str): The ID of the match.
-
-        Returns:
-            bool: True if the match has ended, False otherwise.
-
-       """
-
-        url = 'http://mapps.cricbuzz.com/cbzios/match/' + match_id
-
-        # fetch data from the endpoint.
-        data = CricHighlights.__crawl(url)
-        status = data.get('header').get('status')
-
-        # Check the match status to determine match end
-        regex = re.compile(r'\bwon\b | \blost\b | \bdraw\b', flags=re.I | re.X)
-        matches = regex.findall(status)
-        if matches:
-            return True
-
-        return False
-
-    @staticmethod
     def __splice_highlight(highlights: dict, last_timestamp: int) -> List[dict]:
         """Method to splice out the latest highlights from a list of highlights.
 
@@ -108,6 +82,32 @@ class CricHighlights:
                 high = mid - 1
 
         return highlights[:low + 1]
+
+    @staticmethod
+    def match_did_end(match_id: str) -> bool:
+        """Method to check if the match has ended.
+
+        Args:
+            match_id (str): The ID of the match.
+
+        Returns:
+            bool: True if the match has ended, False otherwise.
+
+       """
+
+        url = 'http://mapps.cricbuzz.com/cbzios/match/' + match_id
+
+        # fetch data from the endpoint.
+        data = CricHighlights.__crawl(url)
+        status = data.get('header').get('status')
+
+        # Check the match status to determine match end
+        regex = re.compile(r'\bwon\b | \blost\b | \bdraw\b', flags=re.I | re.X)
+        matches = regex.findall(status)
+        if matches:
+            return True
+
+        return False
 
     @staticmethod
     def match_did_start(match_id: str) -> bool:
@@ -189,7 +189,7 @@ class CricHighlights:
 
         # Keep fetching highlights until match end.
         last_timestamp = 0  # Track the timestamp of the last received highlight.
-        while not CricHighlights.__match_did_end(match_id) or last_timestamp == 0:
+        while not CricHighlights.match_did_end(match_id) or last_timestamp == 0:
             # fetch data from the endpoint.
             data = CricHighlights.__crawl(url)
             highlights = data.get('comm_lines')
