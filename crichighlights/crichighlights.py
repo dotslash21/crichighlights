@@ -29,29 +29,6 @@ class CricHighlights:
             raise
 
     @staticmethod
-    def __is_match_id_valid(match_id: str) -> bool:
-        """Method to check if the match id is valid.
-
-        Args:
-            match_id (str): The ID of the match.
-
-        Returns:
-            bool: True if the match id is valid, False otherwise.
-
-       """
-
-        url = 'http://mapps.cricbuzz.com/cbzios/match/' + match_id
-
-        # fetch data from the endpoint.
-        data = CricHighlights.__crawl(url)
-
-        # Perform check
-        if match_id != data.get('match_id'):
-            return False
-
-        return True
-
-    @staticmethod
     def __splice_highlight(highlights: dict, last_timestamp: int) -> List[dict]:
         """Method to splice out the latest highlights from a list of highlights.
 
@@ -82,6 +59,29 @@ class CricHighlights:
                 high = mid - 1
 
         return highlights[:low + 1]
+
+    @staticmethod
+    def is_match_id_valid(match_id: str) -> bool:
+        """Method to check if the match id is valid.
+
+        Args:
+            match_id (str): The ID of the match.
+
+        Returns:
+            bool: True if the match id is valid, False otherwise.
+
+       """
+
+        url = 'http://mapps.cricbuzz.com/cbzios/match/' + match_id
+
+        # fetch data from the endpoint.
+        data = CricHighlights.__crawl(url)
+
+        # Perform check
+        if match_id != data.get('match_id'):
+            return False
+
+        return True
 
     @staticmethod
     def match_did_end(match_id: str) -> bool:
@@ -184,7 +184,7 @@ class CricHighlights:
         url = 'http://mapps.cricbuzz.com/cbzios/match/' + match_id + '/commentary'
 
         # Stop if the provided match id is not valid
-        if not CricHighlights.__is_match_id_valid(match_id):
+        if not CricHighlights.is_match_id_valid(match_id):
             return
 
         # Keep fetching highlights until match end.
