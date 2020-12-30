@@ -1,3 +1,6 @@
+import requests
+
+import secrets
 from crichighlights import CricHighlights
 
 
@@ -23,17 +26,39 @@ def show_match_highlights():
     print()
 
 
+def send_message_telegram(message):
+    url = 'https://api.telegram.org/bot' + secrets.BOT_KEY + '/sendMessage'
+
+    requests.post(url, data={"chat_id": secrets.CHAT_ID, "text": message})
+
+
+def send_match_highlights():
+    match_id = input("Enter the Match ID: ")
+
+    if not CricHighlights.match_did_start(match_id):
+        print('The match is yet to start!\n')
+        return
+
+    for highlight in CricHighlights.get_highlights(match_id):
+        print(highlight.get('comm'))
+        send_message_telegram(highlight.get('comm'))
+
+    print()
+
+
 def show_menu():
     print('1) Show live matches')
     print('2) Show match highlights')
-    print('3) Exit')
+    print('3) Send match highlights')
+    print('4) Exit')
 
     choice = int(input("Enter your choice: "))
 
     switcher = {
         1: show_live_matches,
         2: show_match_highlights,
-        3: exit
+        3: send_match_highlights,
+        4: exit
     }
 
     function = switcher.get(choice, None)
