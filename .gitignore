@@ -2,4 +2,4 @@
 /venv/
 
 # Ignore for security reason
-secrets.py
+demo/secrets.py
