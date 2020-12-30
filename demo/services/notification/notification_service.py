@@ -5,6 +5,9 @@ class NotificationService:
         Args:
             message (str): The message to send.
 
+        Raises:
+            Exception: Error connecting to the notification provider.
+
         """
 
         pass

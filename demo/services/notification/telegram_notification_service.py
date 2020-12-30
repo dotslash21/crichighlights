@@ -11,4 +11,7 @@ class TelegramNotificationService(NotificationService):
     def send(self, message: str) -> None:
         url = 'https://api.telegram.org/bot' + secrets.BOT_KEY + '/sendMessage'
 
-        requests.post(url, data={"chat_id": secrets.CHAT_ID, "text": message})
+        try:
+            requests.post(url, data={"chat_id": secrets.CHAT_ID, "text": message})
+        except Exception as e:
+            raise e
