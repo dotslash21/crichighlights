@@ -1,3 +1,4 @@
+import re
 import requests
 
 import secrets
@@ -41,7 +42,19 @@ def send_match_highlights():
 
     for highlight in CricHighlights.get_highlights(match_id):
         print(highlight.get('comm'))
-        send_message_telegram(highlight.get('comm'))
+
+        message = highlight.get('comm')
+
+        # Skip if message is None.
+        if message is None:
+            continue
+
+        # Remove HTML tag.
+        regex = re.compile(r'<.*?>')
+        message = regex.sub('', message)
+
+        # Send message to Telegram.
+        send_message_telegram(message)
 
     print()
 
