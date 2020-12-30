@@ -39,8 +39,11 @@ def show_menu():
     function = switcher.get(choice, None)
 
     if function:
-        print()
-        function()
+        try:
+            print()
+            function()
+        except Exception as e:
+            print(repr(e))
 
 
 if __name__ == '__main__':
