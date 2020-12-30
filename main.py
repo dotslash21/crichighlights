@@ -13,6 +13,10 @@ def show_live_matches():
 def show_match_highlights():
     match_id = input("Enter the Match ID: ")
 
+    if not CricHighlights.match_did_start(match_id):
+        print('The match is yet to start!\n')
+        return
+
     for highlight in CricHighlights.get_highlights(match_id):
         print(highlight.get('comm'))
 
