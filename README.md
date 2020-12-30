@@ -65,3 +65,11 @@ OUTPUT:
 ```text
 {'timestamp': '1609213547645', 'o_no': '14.6', 'i_id': '4', 'score': '69', 'comm': "Labuschagne to Rahane, 3 runs, fuller and outside off, Rahane leans into the drive and places it through the gap at cover. Looked like it be a boundary, but it's hauled back in. Three more and India just a run away now"}
 ```
+  
+## Running the Demo project
+1) To run the demo project, you need to have python 3.8 or above installed. You'll also need the following python packages below installed.
+```text
+requests
+```
+2) You'll need to create a telegram group and a bot. Follow the instructions [here](https://dev.to/rizkyrajitha/get-notifications-with-telegram-bot-537l) and replace the dummy values at `demo/secrets.py`.
+3) Now, you'll just need to run the main.py file at the root to run the demo.
