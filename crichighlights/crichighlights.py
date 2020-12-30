@@ -19,6 +19,29 @@ class CricHighlights:
             raise
 
     @staticmethod
+    def __is_match_id_valid(match_id: str) -> bool:
+        """Method to check if the match id is valid.
+
+        Args:
+            match_id (str): The ID of the match.
+
+        Returns:
+            bool: True if the match id is valid, False otherwise.
+
+       """
+
+        url = 'http://mapps.cricbuzz.com/cbzios/match/' + match_id
+
+        # fetch data from the endpoint.
+        data = CricHighlights.__crawl(url)
+
+        # Perform check
+        if match_id != data.get('match_id'):
+            return False
+
+        return True
+
+    @staticmethod
     def __match_did_end(match_id: str) -> bool:
         """Method to check if the match has ended.
 
@@ -127,22 +150,13 @@ class CricHighlights:
 
         url = 'http://mapps.cricbuzz.com/cbzios/match/' + match_id + '/commentary'
 
-        # Check if the match already ended.
-        if CricHighlights.__match_did_end(match_id):
-            # fetch data from the endpoint.
-            data = CricHighlights.__crawl(url)
-            highlights = data.get('comm_lines')
-
-            # yield the highlights
-            for highlight in reversed(highlights):
-                yield highlight
-
-            # Raise StopIteration
+        # Stop if the provided match id is not valid
+        if not CricHighlights.__is_match_id_valid(match_id):
             return
 
         # Keep fetching highlights until match end.
         last_timestamp = 0  # Track the timestamp of the last received highlight.
-        while not CricHighlights.__match_did_end(match_id):
+        while not CricHighlights.__match_did_end(match_id) or last_timestamp == 0:
             # fetch data from the endpoint.
             data = CricHighlights.__crawl(url)
             highlights = data.get('comm_lines')
