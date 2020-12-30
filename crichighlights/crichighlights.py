@@ -110,6 +110,29 @@ class CricHighlights:
         return highlights[:low + 1]
 
     @staticmethod
+    def match_did_start(match_id: str) -> bool:
+        """Method to check if the match has started.
+
+        Args:
+            match_id (str): The ID of the match.
+
+        Returns:
+            bool: True if the match has started, False otherwise.
+
+       """
+
+        url = 'http://mapps.cricbuzz.com/cbzios/match/' + match_id
+
+        # fetch data from the endpoint.
+        data = CricHighlights.__crawl(url)
+        state = data.get('header').get('state')
+
+        if state == 'preview':
+            return False
+
+        return True
+
+    @staticmethod
     def get_live_matches() -> List[dict]:
         """Method to fetch the current live match list.
 
