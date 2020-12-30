@@ -12,6 +12,16 @@ class CricHighlights:
 
     @staticmethod
     def __crawl(url: str) -> dict:
+        """Method to fetch data from a given URL.
+
+        Args:
+            url (str): The URL to fetch data from.
+
+        Returns:
+            dict: The fetched JSON data as Python dict.
+
+       """
+
         try:
             response = requests.get(url).json()
             return response
